@@ -5,62 +5,74 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Coffee Corner — Pesan Kopi via WhatsApp</title>
 <style>
+/* Styling ringan, tetap rapi */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 :root{
   --brown:#4b2e05;
   --cream:#fff7e6;
   --accent:#c47f2e;
-  --accent-dark:#9c5a11;
   --muted:#7a6a5a;
-  --radius:20px;
-  --max-width:1200px;
+  --radius:16px;
+  --max-width:1100px;
   font-family:'Poppins',sans-serif;
 }
-*{box-sizing:border-box;}
-body{
-  margin:0;
-  background:linear-gradient(180deg,#fffaf2 0%,#fbe9c8 100%);
-  color:#2c1a08;
-  min-height:100vh;
-  padding:40px 20px;
-}
-.wrap{max-width:var(--max-width);margin:auto;}
-header{display:flex;align-items:center;gap:20px;margin-bottom:40px;}
-.logo{background:linear-gradient(135deg,#c47f2e,#ffb84d);width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:26px;box-shadow:0 4px 15px rgba(0,0,0,0.15);}
-h1{margin:0;font-size:30px;font-weight:800;color:#4b2e05;}
-.lead{margin-top:6px;color:var(--muted);font-size:15px;}
-.grid{display:grid;grid-template-columns:1fr 400px;gap:24px;}
-@media(max-width:900px){.grid{grid-template-columns:1fr;}}
-.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;}
-.card{background:#fffdf7;border-radius:var(--radius);padding:20px;box-shadow:0 4px 15px rgba(0,0,0,0.08);transition:.3s;}
-.card:hover{transform:translateY(-5px);box-shadow:0 8px 25px rgba(0,0,0,0.1);}
-.prod-img{height:160px;border-radius:15px;overflow:hidden;margin-bottom:12px;display:flex;align-items:center;justify-content:center;background:#f2e4d4;}
-.prod-img img{width:100%;height:100%;object-fit:cover;transition:.4s;}
-.card:hover img{transform:scale(1.08);}
-.prod-title{font-weight:700;font-size:18px;margin-bottom:4px;}
-.prod-desc{font-size:14px;color:var(--muted);margin-bottom:10px;}
-.price-row{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #eee;padding-top:10px;margin-top:10px;}
-.price{font-weight:700;color:var(--accent);}
-.qty{display:flex;align-items:center;gap:6px;}
-.qty button{width:32px;height:32px;border:0;border-radius:8px;background:var(--accent);color:#fff;cursor:pointer;font-weight:700;transition:.3s;}
-.qty button:hover{background:var(--accent-dark);}
-.qty input{width:45px;text-align:center;border:1px solid #ddd;border-radius:8px;padding:5px;font-weight:600;}
-.cart .card{position:sticky;top:30px;}
-.cart h3{margin-top:0;font-size:22px;font-weight:700;color:var(--brown);}
-.cart-list{max-height:300px;overflow:auto;margin-bottom:16px;}
-.cart-item{display:flex;gap:10px;padding:10px;border:1px solid #eee;border-radius:12px;background:#fff;margin-bottom:10px;align-items:center;}
-.cart-item img{width:60px;height:60px;object-fit:cover;border-radius:10px;}
-.total-row{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:18px;background:#fff3e0;padding:14px;border-radius:12px;margin-top:10px;}
-.total-row #total{color:var(--accent);}
-.controls{display:flex;flex-direction:column;gap:10px;margin-top:15px;}
-.controls input,.controls textarea{padding:12px 14px;border-radius:10px;border:1px solid #ddd;font-family:inherit;}
-.controls input:focus,.controls textarea:focus{outline:none;border-color:var(--accent);}
-.controls input::placeholder,.controls textarea::placeholder{color:#bba88b;}
-.btn{padding:12px 16px;border-radius:10px;border:0;cursor:pointer;font-weight:700;font-family:inherit;transition:.3s;}
-.btn-primary{background:linear-gradient(135deg,#c47f2e,#ffb84d);color:#fff;box-shadow:0 4px 12px rgba(196,127,46,0.3);}
-.btn-primary:hover{transform:translateY(-2px);}
-.btn-ghost{background:#fff;border:1px solid #ddd;color:#4b2e05;}
-footer{margin-top:20px;font-size:13px;color:#7a6a5a;text-align:center;}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#fffaf2,#fbe9c8);color:#2c1a08;padding:36px;min-height:100vh}
+.wrap{max-width:var(--max-width);margin:0 auto}
+header{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,#c47f2e,#ffb84d);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+h1{margin:0;font-size:22px}
+.lead{margin:6px 0 0;color:var(--muted);font-size:13px}
+
+/* layout */
+.layout{display:grid;grid-template-columns:1fr 360px;gap:24px}
+@media (max-width:980px){.layout{grid-template-columns:1fr}}
+
+/* category list */
+.categories{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.cat-btn{padding:8px 12px;border-radius:999px;border:1px solid rgba(0,0,0,0.06);background:#fff;cursor:pointer;font-weight:600}
+.cat-btn.active{background:linear-gradient(90deg,var(--accent),#ffb84d);color:#fff;border-color:transparent;box-shadow:0 6px 18px rgba(196,127,46,0.15)}
+
+/* product cards */
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.card{background:#fff;padding:14px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.06);display:flex;flex-direction:column;gap:10px}
+.prod-img{height:120px;border-radius:10px;overflow:hidden;background:#f2e4d4;display:flex;align-items:center;justify-content:center}
+.prod-img img{width:100%;height:100%;object-fit:cover}
+.prod-title{font-weight:700;font-size:16px;margin:0}
+.prod-desc{font-size:13px;color:var(--muted);margin:0}
+
+/* price row with original crossed */
+.price-row{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+.price-block{display:flex;flex-direction:column;gap:6px}
+.price-old{font-size:13px;color:var(--muted);text-decoration:line-through}
+.price-now{font-weight:800;color:var(--accent)}
+
+/* qty */
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:34px;height:34px;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer;font-weight:700}
+.qty input{width:48px;text-align:center;border:1px solid #e9e2d6;border-radius:8px;padding:6px}
+
+/* cart */
+.cart{position:sticky;top:24px}
+.cart .card{padding:18px;background:#fff}
+.cart h3{margin:0 0 10px 0;font-size:20px}
+.cart-list{max-height:360px;overflow:auto;display:flex;flex-direction:column;gap:12px}
+.cart-item{display:flex;gap:12px;align-items:center;padding:10px;border-radius:10px;border:1px solid #f1e8db}
+.cart-item img{width:56px;height:56px;border-radius:8px;object-fit:cover}
+.cart-item .meta{flex:1}
+.total-row{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;background:#fff3e0;margin-top:8px;font-weight:800}
+.controls{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.controls input,.controls textarea{padding:10px;border-radius:8px;border:1px solid #e9e2d6}
+.controls textarea{resize:vertical}
+.btn{padding:12px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+.btn-primary{background:linear-gradient(90deg,var(--accent),#ffb84d);color:#fff}
+.btn-ghost{background:#fff;border:1px solid #e9e2d6}
+
+/* small */
+.note{font-size:13px;color:var(--muted);margin-top:8px}
+
+/* strike style for old price smaller */
+.price-old small{font-size:12px;color:var(--muted);margin-left:6px}
 </style>
 </head>
 <body>
@@ -69,121 +81,193 @@ footer{margin-top:20px;font-size:13px;color:#7a6a5a;text-align:center;}
     <div class="logo">☕</div>
     <div>
       <h1>Coffee Corner</h1>
-      <p class="lead">Nikmati aroma kopi terbaik, pesan langsung via WhatsApp!</p>
+      <div class="lead">Pilih kategori & menu — harga diskon tampil, harga asli dicoret.</div>
     </div>
   </header>
 
-  <div class="grid">
-    <section>
+  <div class="layout">
+    <main>
+      <div class="categories" id="categories"></div>
       <div class="products" id="products"></div>
-    </section>
+    </main>
 
     <aside class="cart">
       <div class="card">
         <h3>Keranjang</h3>
-        <div id="cart-list" class="cart-list"><p style="text-align:center;color:var(--muted)">Belum ada item</p></div>
+        <div id="cart-list" class="cart-list"><div style="text-align:center;color:var(--muted)">Belum ada item</div></div>
         <div class="total-row"><div>Total</div><div id="total">Rp 0</div></div>
+
         <div class="controls">
-          <!-- hanya 1 nomor WA -->
-          <input id="waNumber" value="6288210490702" placeholder="Nomor WhatsApp tujuan (contoh: 62812...)">
-          <input id="custName" placeholder="Nama (opsional)">
+          <input id="waNumber" value="6288210490702" />
+          <input id="custName" placeholder="Nama (opsional)" />
           <textarea id="custNotes" rows="2" placeholder="Catatan / alamat (opsional)"></textarea>
           <div style="display:flex;gap:10px">
             <button class="btn btn-primary" id="orderBtn" style="flex:1">Order via WhatsApp</button>
             <button class="btn btn-ghost" id="clearBtn">Bersihkan</button>
           </div>
         </div>
+
+        <div class="note">Harga yang akan dihitung adalah harga diskon (yang tidak dicoret).</div>
       </div>
-      <footer>Semua data langsung dikirim ke WhatsApp tanpa backend.</footer>
     </aside>
   </div>
 </div>
 
 <script>
-const PRODUCTS=[
-  {id:'p1',name:'Americano',price:10000,desc:'Espresso + air panas',img:'caffucino.png'},
-  {id:'p2',name:'Cappuccino',price:20000,desc:'Espresso, susu & busa lembut',img:'caffucino.png'},
-  {id:'p3',name:'Latte',price:22000,desc:'Kopi susu lembut',img:'caffucino.png'},
-  {id:'p4',name:'Espresso',price:9000,desc:'Pekat dan klasik',img:'caffucino.png'},
-  {id:'p5',name:'Mocha',price:25000,desc:'Cokelat dan kopi berpadu',img:'caffucino.png'},
-  {id:'p6',name:'Kopi Bubuk 500gr',price:120000,desc:'Biji pilihan, siap seduh',img:'caffucino.png'}
+// Data: 3 kategori x 3 menu each.
+// Each product has: id, category, name, desc, priceOriginal, price (discount), img
+const PRODUCTS = [
+  // Kopi Kenangan
+  { id:'kk1', category:'Kopi Kenangan', name:'Kopi Susu', desc:'Kopi susu manis khas', priceOriginal:25000, price:20000, img:'caffucino.png' },
+  { id:'kk2', category:'Kopi Kenangan', name:'Es Kopi Mantap', desc:'Dingin & menyegarkan', priceOriginal:28000, price:23000, img:'caffucino.png' },
+  { id:'kk3', category:'Kopi Kenangan', name:'Kopi Tubruk', desc:'Tradisional, kuat rasa', priceOriginal:18000, price:15000, img:'caffucino.png' },
+
+  // Tomoro
+  { id:'tm1', category:'Tomoro', name:'Tomoro Latte', desc:'Susu & espresso lembut', priceOriginal:26000, price:21000, img:'caffucino.png' },
+  { id:'tm2', category:'Tomoro', name:'Tomoro Mocha', desc:'Cokelat + kopi', priceOriginal:30000, price:25000, img:'caffucino.png' },
+  { id:'tm3', category:'Tomoro', name:'Tomoro Espresso', desc:'Shot espresso pekat', priceOriginal:12000, price:10000, img:'caffucino.png' },
+
+  // Fore
+  { id:'fr1', category:'Fore', name:'Fore Signature', desc:'Resep spesial house', priceOriginal:35000, price:30000, img:'caffucino.png' },
+  { id:'fr2', category:'Fore', name:'Fore Cappuccino', desc:'Busa krim lembut', priceOriginal:24000, price:20000, img:'caffucino.png'},
+  { id:'fr3', category:'Fore', name:'Fore Cold Brew', desc:'Ekstraksi dingin', priceOriginal:45000, price:38000, img:'caffucino.png' }
 ];
-const cart={};
-function formatIDR(n){ return 'Rp '+Number(n).toLocaleString('id-ID'); }
-const productsEl=document.getElementById('products');
-PRODUCTS.forEach(p=>{
-  const el=document.createElement('div');
-  el.className='card';
-  el.innerHTML=`
-    <div class="prod-img"><img src="${p.img}" alt="${p.name}"></div>
-    <div class="prod-title">${p.name}</div>
-    <div class="prod-desc">${p.desc}</div>
-    <div class="price-row">
-      <div class="price">${formatIDR(p.price)}</div>
-      <div class="qty">
-        <button data-action="dec" data-id="${p.id}">-</button>
-        <input type="number" min="0" value="0" data-id="${p.id}">
-        <button data-action="inc" data-id="${p.id}">+</button>
+
+const CATEGORIES = [...new Set(PRODUCTS.map(p=>p.category))];
+
+const productsEl = document.getElementById('products');
+const categoriesEl = document.getElementById('categories');
+const cartList = document.getElementById('cart-list');
+const totalEl = document.getElementById('total');
+
+let activeCategory = CATEGORIES[0];
+const cart = {}; // id -> qty
+
+// render category buttons
+CATEGORIES.forEach(cat=>{
+  const b = document.createElement('button');
+  b.className = 'cat-btn' + (cat===activeCategory ? ' active':'' );
+  b.textContent = cat;
+  b.onclick = ()=>{ activeCategory = cat; document.querySelectorAll('.cat-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); renderProducts(); }
+  categoriesEl.appendChild(b);
+});
+
+// render products for active category
+function renderProducts(){
+  productsEl.innerHTML = '';
+  const list = PRODUCTS.filter(p=>p.category === activeCategory);
+  list.forEach(p=>{
+    const el = document.createElement('div');
+    el.className = 'card';
+    el.innerHTML = `
+      <div class="prod-img"><img src="${p.img}" alt="${p.name}"></div>
+      <div class="prod-title">${p.name}</div>
+      <div class="prod-desc">${p.desc}</div>
+      <div class="price-row">
+        <div class="price-block">
+          <div class="price-now">${formatIDR(p.price)}</div>
+          <div class="price-old"><small>${formatIDR(p.priceOriginal)}</small></div>
+        </div>
+        <div class="qty">
+          <button data-action="dec" data-id="${p.id}">-</button>
+          <input type="number" min="0" value="${cart[p.id]||0}" data-id="${p.id}">
+          <button data-action="inc" data-id="${p.id}">+</button>
+        </div>
       </div>
-    </div>`;
-  productsEl.appendChild(el);
-});
-productsEl.addEventListener('click',e=>{
-  const btn=e.target.closest('button'); if(!btn) return;
-  const action=btn.dataset.action,id=btn.dataset.id;
-  const inp=productsEl.querySelector(`input[data-id="${id}"]`);
-  let v=parseInt(inp.value||0);
-  if(action==='inc') v++; else if(action==='dec') v=Math.max(0,v-1);
-  inp.value=v; updateCartItem(id,v);
-});
-productsEl.addEventListener('change',e=>{
-  const inp=e.target.closest('input'); if(!inp) return;
-  const id=inp.dataset.id; let v=parseInt(inp.value||0);
-  if(isNaN(v)||v<0) v=0; inp.value=v; updateCartItem(id,v);
-});
-const cartList=document.getElementById('cart-list'), totalEl=document.getElementById('total');
-function updateCartItem(id,qty){ if(qty<=0) delete cart[id]; else cart[id]=qty; renderCart(); }
-function renderCart(){
-  cartList.innerHTML=''; let total=0;
-  const items=Object.keys(cart).map(id=>{ const p=PRODUCTS.find(x=>x.id===id); return {p,qty:cart[id]}; });
-  if(items.length===0){ cartList.innerHTML='<p style="text-align:center;color:var(--muted)">Belum ada item</p>'; totalEl.textContent='Rp 0'; return; }
-  items.forEach(({p,qty})=>{
-    const sub=p.price*qty; total+=sub;
-    const div=document.createElement('div'); div.className='cart-item';
-    div.innerHTML=`
-      <img src="${p.img}" alt="${p.name}">
-      <div style="flex:1"><b>${p.name}</b><br><small style="color:var(--muted)">${p.desc}</small><br><span style="color:var(--accent)">${formatIDR(sub)}</span></div>
-      <div style="display:flex;flex-direction:column;gap:6px;align-items:center">
-        <button data-action="inc" data-id="${p.id}">+</button>
-        <div style="min-width:32px;text-align:center;font-weight:700">${qty}</div>
-        <button data-action="dec" data-id="${p.id}">-</button>
-      </div>`;
-    cartList.appendChild(div);
-  });
-  totalEl.textContent=formatIDR(total);
-  cartList.querySelectorAll('button').forEach(b=>{
-    b.addEventListener('click',()=>{ const a=b.dataset.action,id=b.dataset.id; const v=cart[id]||0; if(a==='inc') updateCartItem(id,v+1); else updateCartItem(id,Math.max(0,v-1)); });
+    `;
+    productsEl.appendChild(el);
   });
 }
-document.getElementById('clearBtn').addEventListener('click',()=>{
+renderProducts();
+
+// click & change handlers for qty controls
+productsEl.addEventListener('click', e=>{
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  const act = btn.dataset.action, id = btn.dataset.id;
+  const inp = productsEl.querySelector(`input[data-id="${id}"]`);
+  let v = parseInt(inp.value||0);
+  if(act === 'inc') v++; else v = Math.max(0, v-1);
+  inp.value = v;
+  updateCartItem(id, v);
+});
+productsEl.addEventListener('change', e=>{
+  const inp = e.target.closest('input');
+  if(!inp) return;
+  const id = inp.dataset.id;
+  let v = parseInt(inp.value||0);
+  if(isNaN(v) || v<0) v=0;
+  inp.value = v;
+  updateCartItem(id, v);
+});
+
+// update cart state & render
+function updateCartItem(id, qty){
+  if(qty <= 0) delete cart[id];
+  else cart[id] = qty;
+  renderCart();
+}
+function renderCart(){
+  cartList.innerHTML = '';
+  const items = Object.keys(cart).map(id=>{
+    const p = PRODUCTS.find(x=>x.id===id);
+    return { p, qty: cart[id], subtotal: p.price * cart[id] };
+  });
+  if(items.length === 0){
+    cartList.innerHTML = '<div style="text-align:center;color:var(--muted)">Belum ada item</div>';
+    totalEl.textContent = 'Rp 0';
+    return;
+  }
+  let total = 0;
+  items.forEach(it=>{
+    total += it.subtotal;
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    div.innerHTML = `
+      <img src="${it.p.img}" alt="${it.p.name}">
+      <div class="meta"><b>${it.p.name}</b><div style="font-size:13px;color:var(--muted)">${it.p.desc}</div><div style="margin-top:6px;color:var(--accent)">${formatIDR(it.subtotal)}</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+        <button data-action="inc" data-id="${it.p.id}">+</button>
+        <div style="min-width:28px;text-align:center;font-weight:700">${it.qty}</div>
+        <button data-action="dec" data-id="${it.p.id}">-</button>
+      </div>
+    `;
+    cartList.appendChild(div);
+  });
+  totalEl.textContent = formatIDR(total);
+
+  // wire cart buttons
+  cartList.querySelectorAll('button').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const a = b.dataset.action, id = b.dataset.id;
+      const curr = cart[id] || 0;
+      if(a === 'inc') updateCartItem(id, curr + 1);
+      else updateCartItem(id, Math.max(0, curr - 1));
+    });
+  });
+}
+
+// clear
+document.getElementById('clearBtn').addEventListener('click', ()=>{
   Object.keys(cart).forEach(k=>delete cart[k]);
-  productsEl.querySelectorAll('input[type=number]').forEach(i=>i.value=0);
+  productsEl.querySelectorAll('input[type=number]').forEach(i=>i.value = 0);
   renderCart();
 });
 
-// Order handler — only one WA number (6288210490702)
-document.getElementById('orderBtn').addEventListener('click',()=>{
-  const waInput=document.getElementById('waNumber').value.trim();
-  if(!waInput){ alert('Silakan isi Nomor WhatsApp tujuan (contoh: 62812...)'); return; }
+// format helper
+function formatIDR(n){ return 'Rp ' + Number(n).toLocaleString('id-ID'); }
 
-  const items=Object.keys(cart).map(id=>{
-    const p=PRODUCTS.find(x=>x.id===id);
-    return {name:p.name,qty:cart[id],subtotal:p.price*cart[id]};
+// Order -> build message using discounted price (p.price)
+document.getElementById('orderBtn').addEventListener('click', ()=>{
+  const waRaw = document.getElementById('waNumber').value.trim();
+  if(!waRaw){ alert('Isi nomor WhatsApp tujuan (contoh: 62812...)'); return; }
+  const items = Object.keys(cart).map(id=>{
+    const p = PRODUCTS.find(x=>x.id===id);
+    return { name: p.name, qty: cart[id], subtotal: p.price * cart[id] };
   });
-  if(items.length===0){ alert('Keranjang kosong — tambahkan item.'); return; }
+  if(items.length === 0){ alert('Keranjang kosong — tambahkan item.'); return; }
 
-  // build message
-  const lines=[];
+  const lines = [];
   lines.push('Halo! Saya ingin memesan dari Coffee Corner:');
   lines.push('');
   let total=0;
@@ -193,26 +277,27 @@ document.getElementById('orderBtn').addEventListener('click',()=>{
   });
   lines.push('');
   lines.push(`Total: ${formatIDR(total)}`);
-  const name=document.getElementById('custName').value.trim();
-  const notes=document.getElementById('custNotes').value.trim();
+  const name = document.getElementById('custName').value.trim();
+  const notes = document.getElementById('custNotes').value.trim();
   if(name) lines.push('', 'Nama: ' + name);
   if(notes) lines.push('Catatan/Alamat: ' + notes);
   lines.push('', 'Terima kasih!');
 
   const encoded = encodeURIComponent(lines.join('\n'));
 
-  // normalize number: allow formats like 0858..., +628..., or 628...
-  let cleaned = waInput.replace(/[^\d\+]/g, '');
+  // normalize number (0... -> 62..., remove +)
+  let cleaned = waRaw.replace(/[^\d\+]/g, '');
   if(cleaned.startsWith('+')) cleaned = cleaned.slice(1);
   if(cleaned.startsWith('0')) cleaned = '62' + cleaned.slice(1);
   cleaned = cleaned.replace(/[^\d]/g, '');
-  if(!/^\d+$/.test(cleaned)){ alert('Nomor WhatsApp tidak valid. Pastikan berisi angka (contoh: 62812...)'); return; }
+  if(!/^\d+$/.test(cleaned)){ alert('Nomor WhatsApp tidak valid'); return; }
 
-  const url = 'https://wa.me/' + cleaned + '?text=' + encoded;
+  // choose web.whatsapp for desktop for reliable prefill
+  const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+  const url = isMobile ? ('https://wa.me/' + cleaned + '?text=' + encoded) : ('https://web.whatsapp.com/send?phone=' + cleaned + '&text=' + encoded);
   window.open(url, '_blank');
 });
 
-renderCart();
 </script>
 </body>
 </html>
