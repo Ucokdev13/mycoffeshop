@@ -1,794 +1,218 @@
 <!doctype html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Coffee Corner — Pesan via WhatsApp</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
-    
-    :root{
-      --bg:#0a0e1a;
-      --card:#141b2d;
-      --accent:#ff8c42;
-      --accent-light:#ffa35c;
-      --muted:#8b92a8;
-      --glass: rgba(255,255,255,0.05);
-      --radius:20px;
-      --max-width:1200px;
-      --card-pad:24px;
-      font-family: 'Poppins', ui-sans-serif, system-ui, -apple-system;
-    }
-    
-    *{box-sizing:border-box}
-    
-    body{
-      margin:0;
-      background:#0a0e1a;
-      background-image: 
-        radial-gradient(at 20% 10%, rgba(255,140,66,0.15) 0px, transparent 50%),
-        radial-gradient(at 80% 80%, rgba(66,140,255,0.1) 0px, transparent 50%),
-        radial-gradient(at 50% 50%, rgba(138,43,226,0.05) 0px, transparent 50%);
-      color:#e8ecf4;
-      min-height:100vh;
-      padding:40px 24px;
-      position:relative;
-      overflow-x:hidden;
-    }
-    
-    /* Animated background elements */
-    body::before {
-      content: '';
-      position: fixed;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: 
-        radial-gradient(circle at 30% 40%, rgba(255,140,66,0.08) 0%, transparent 40%),
-        radial-gradient(circle at 70% 60%, rgba(138,43,226,0.06) 0%, transparent 40%);
-      animation: drift 20s ease-in-out infinite;
-      pointer-events: none;
-      z-index: 0;
-    }
-    
-    @keyframes drift {
-      0%, 100% { transform: translate(0, 0) rotate(0deg); }
-      50% { transform: translate(30px, -30px) rotate(5deg); }
-    }
-    
-    .wrap{
-      width:100%;
-      max-width:var(--max-width);
-      margin:0 auto;
-      position:relative;
-      z-index:1;
-    }
-    
-    header{
-      display:flex;
-      align-items:center;
-      gap:24px;
-      margin-bottom:48px;
-      animation: slideDown 0.6s ease-out;
-    }
-    
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .logo{
-      background:linear-gradient(135deg, #ff8c42 0%, #ff6b35 50%, #f7931e 100%);
-      width:88px;
-      height:88px;
-      border-radius:22px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:800;
-      box-shadow:
-        0 20px 40px rgba(255,140,66,0.3),
-        0 0 0 1px rgba(255,255,255,0.1) inset;
-      position:relative;
-      overflow:hidden;
-    }
-    
-    .logo::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
-      animation: shine 3s infinite;
-    }
-    
-    @keyframes shine {
-      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-    }
-    
-    .logo span{
-      font-size:28px;
-      color:#fff;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-      position:relative;
-      z-index:1;
-    }
-    
-    h1{
-      margin:0;
-      font-size:32px;
-      font-weight:800;
-      background:linear-gradient(135deg, #fff 0%, #e8ecf4 100%);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      background-clip:text;
-    }
-    
-    p.lead{
-      margin:6px 0 0;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.6;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns:1fr 420px;
-      gap:32px;
-      animation: fadeIn 0.8s ease-out 0.2s backwards;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    @media (max-width:1000px){.grid{grid-template-columns:1fr}}
-
-    /* product list */
-    .products{
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-      gap:24px;
-    }
-    
-    .card{
-      background:rgba(20,27,45,0.6);
-      backdrop-filter:blur(20px);
-      padding:var(--card-pad);
-      border-radius:var(--radius);
-      box-shadow:
-        0 8px 32px rgba(0,0,0,0.4),
-        0 0 0 1px rgba(255,255,255,0.05) inset;
-      border:1px solid rgba(255,255,255,0.08);
-      transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position:relative;
-      overflow:hidden;
-    }
-    
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(255,140,66,0.5), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    
-    .card:hover::before {
-      opacity: 1;
-    }
-    
-    .card:hover{
-      transform:translateY(-8px);
-      box-shadow:
-        0 20px 50px rgba(0,0,0,0.5),
-        0 0 0 1px rgba(255,140,66,0.3) inset;
-      border-color:rgba(255,140,66,0.3);
-    }
-    
-    .prod-img{
-      height:180px;
-      border-radius:16px;
-      overflow:hidden;
-      margin-bottom:16px;
-      background:linear-gradient(135deg, #1a2332 0%, #0f1419 100%);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      position:relative;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3) inset;
-    }
-    
-    .prod-img::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,140,66,0.1) 0%, transparent 100%);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    
-    .card:hover .prod-img::after {
-      opacity: 1;
-    }
-    
-    .prod-img img{
-      max-width:100%;
-      max-height:100%;
-      object-fit:cover;
-      transition:transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .card:hover .prod-img img{
-      transform:scale(1.1);
-    }
-    
-    .prod-title{
-      font-weight:700;
-      margin:0 0 8px 0;
-      font-size:18px;
-      color:#fff;
-    }
-    
-    .prod-desc{
-      margin:0;
-      color:var(--muted);
-      font-size:14px;
-      margin-bottom:16px;
-      line-height:1.5;
-    }
-    
-    .price-row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding-top:12px;
-      border-top:1px solid rgba(255,255,255,0.06);
-    }
-    
-    .price{
-      font-weight:800;
-      font-size:20px;
-      background:linear-gradient(135deg, #ff8c42 0%, #ffa35c 100%);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      background-clip:text;
-    }
-    
-    .qty{
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
-    
-    .qty button{
-      width:36px;
-      height:36px;
-      border-radius:10px;
-      border:0;
-      background:rgba(255,140,66,0.15);
-      color:#ff8c42;
-      cursor:pointer;
-      font-weight:700;
-      font-size:18px;
-      transition:all 0.2s;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-    
-    .qty button:hover{
-      background:rgba(255,140,66,0.25);
-      transform:scale(1.1);
-    }
-    
-    .qty button:active{
-      transform:scale(0.95);
-    }
-    
-    .qty input{
-      width:50px;
-      text-align:center;
-      background:rgba(255,255,255,0.03);
-      border:1px solid rgba(255,255,255,0.08);
-      padding:8px;
-      border-radius:10px;
-      color:inherit;
-      font-weight:600;
-      font-size:15px;
-    }
-
-    /* cart */
-    .cart{
-      position:sticky;
-      top:32px;
-    }
-    
-    .cart .card{
-      padding:28px;
-      background:rgba(20,27,45,0.8);
-    }
-    
-    .cart h3{
-      margin:0 0 20px 0;
-      font-size:24px;
-      font-weight:800;
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    
-    .cart h3::before{
-      content:'🛒';
-      font-size:28px;
-    }
-    
-    .cart-list{
-      max-height:380px;
-      overflow:auto;
-      margin-bottom:20px;
-      padding-right:4px;
-    }
-    
-    .cart-list::-webkit-scrollbar{
-      width:6px;
-    }
-    
-    .cart-list::-webkit-scrollbar-track{
-      background:rgba(255,255,255,0.02);
-      border-radius:10px;
-    }
-    
-    .cart-list::-webkit-scrollbar-thumb{
-      background:rgba(255,140,66,0.3);
-      border-radius:10px;
-    }
-    
-    .cart-list::-webkit-scrollbar-thumb:hover{
-      background:rgba(255,140,66,0.5);
-    }
-    
-    .cart-item{
-      display:flex;
-      gap:14px;
-      align-items:center;
-      padding:12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,0.06);
-      margin-bottom:12px;
-      background:rgba(255,255,255,0.02);
-      transition:all 0.3s;
-    }
-    
-    .cart-item:hover{
-      background:rgba(255,255,255,0.04);
-      border-color:rgba(255,140,66,0.3);
-      transform:translateX(4px);
-    }
-    
-    .cart-item img{
-      width:64px;
-      height:64px;
-      border-radius:12px;
-      object-fit:cover;
-      box-shadow:0 4px 12px rgba(0,0,0,0.3);
-    }
-    
-    .cart-item .meta{flex:1}
-    
-    .cart-item button{
-      width:32px;
-      height:32px;
-      border-radius:8px;
-      border:0;
-      background:rgba(255,140,66,0.15);
-      color:#ff8c42;
-      cursor:pointer;
-      font-weight:700;
-      transition:all 0.2s;
-    }
-    
-    .cart-item button:hover{
-      background:rgba(255,140,66,0.25);
-      transform:scale(1.1);
-    }
-    
-    .total-row{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      font-weight:800;
-      margin-top:20px;
-      padding:20px;
-      background:rgba(255,140,66,0.08);
-      border-radius:14px;
-      border:1px solid rgba(255,140,66,0.2);
-      font-size:22px;
-    }
-    
-    .total-row #total{
-      color:#ff8c42;
-    }
-
-    .controls{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      margin-top:20px;
-    }
-    
-    .controls input, .controls textarea{
-      width:100%;
-      padding:14px 16px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,0.08);
-      background:rgba(255,255,255,0.03);
-      color:inherit;
-      font-family:inherit;
-      font-size:14px;
-      transition:all 0.3s;
-    }
-    
-    .controls input:focus, .controls textarea:focus{
-      outline:none;
-      border-color:rgba(255,140,66,0.5);
-      background:rgba(255,255,255,0.05);
-      box-shadow:0 0 0 3px rgba(255,140,66,0.1);
-    }
-    
-    .controls input::placeholder, .controls textarea::placeholder{
-      color:rgba(139,146,168,0.6);
-    }
-    
-    .btn{
-      display:inline-block;
-      padding:14px 20px;
-      border-radius:12px;
-      border:0;
-      cursor:pointer;
-      font-weight:700;
-      font-size:15px;
-      font-family:inherit;
-      transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position:relative;
-      overflow:hidden;
-    }
-    
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      transform: translate(-50%, -50%);
-      transition: width 0.6s, height 0.6s;
-    }
-    
-    .btn:hover::before {
-      width: 300px;
-      height: 300px;
-    }
-    
-    .btn-primary{
-      background:linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
-      color:#fff;
-      box-shadow:
-        0 8px 24px rgba(255,140,66,0.35),
-        0 0 0 1px rgba(255,255,255,0.1) inset;
-      position:relative;
-    }
-    
-    .btn-primary:hover{
-      transform:translateY(-2px);
-      box-shadow:
-        0 12px 32px rgba(255,140,66,0.45),
-        0 0 0 1px rgba(255,255,255,0.2) inset;
-    }
-    
-    .btn-primary:active{
-      transform:translateY(0);
-    }
-    
-    .btn-ghost{
-      background:rgba(255,255,255,0.03);
-      border:1px solid rgba(255,255,255,0.1);
-      color:#e8ecf4;
-    }
-    
-    .btn-ghost:hover{
-      background:rgba(255,255,255,0.06);
-      border-color:rgba(255,255,255,0.2);
-    }
-
-    .info-card{
-      margin-bottom:24px;
-      background:rgba(66,140,255,0.08);
-      border:1px solid rgba(66,140,255,0.2);
-      border-radius:16px;
-      padding:20px;
-    }
-    
-    .info-card strong{
-      color:#6ba3ff;
-      font-size:16px;
-    }
-    
-    .info-card p{
-      margin:10px 0 0;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.6;
-    }
-
-    footer{
-      margin-top:24px;
-      color:var(--muted);
-      font-size:13px;
-      text-align:center;
-      padding:20px;
-      background:rgba(255,255,255,0.02);
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,0.04);
-    }
-
-    @media (max-width:600px){
-      .products{
-        grid-template-columns:1fr;
-      }
-      h1{font-size:24px}
-      .logo{width:72px; height:72px}
-      .logo span{font-size:24px}
-    }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Coffee Corner — Pesan Kopi via WhatsApp</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+:root{
+  --brown:#4b2e05;
+  --cream:#fff7e6;
+  --accent:#c47f2e;
+  --accent-dark:#9c5a11;
+  --muted:#7a6a5a;
+  --radius:20px;
+  --max-width:1200px;
+  font-family:'Poppins',sans-serif;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:linear-gradient(180deg,#fffaf2 0%,#fbe9c8 100%);
+  color:#2c1a08;
+  min-height:100vh;
+  padding:40px 20px;
+}
+.wrap{max-width:var(--max-width);margin:auto;}
+header{display:flex;align-items:center;gap:20px;margin-bottom:40px;}
+.logo{background:linear-gradient(135deg,#c47f2e,#ffb84d);width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:26px;box-shadow:0 4px 15px rgba(0,0,0,0.15);}
+h1{margin:0;font-size:30px;font-weight:800;color:#4b2e05;}
+.lead{margin-top:6px;color:var(--muted);font-size:15px;}
+.grid{display:grid;grid-template-columns:1fr 400px;gap:24px;}
+@media(max-width:900px){.grid{grid-template-columns:1fr;}}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;}
+.card{background:#fffdf7;border-radius:var(--radius);padding:20px;box-shadow:0 4px 15px rgba(0,0,0,0.08);transition:.3s;}
+.card:hover{transform:translateY(-5px);box-shadow:0 8px 25px rgba(0,0,0,0.1);}
+.prod-img{height:160px;border-radius:15px;overflow:hidden;margin-bottom:12px;display:flex;align-items:center;justify-content:center;background:#f2e4d4;}
+.prod-img img{width:100%;height:100%;object-fit:cover;transition:.4s;}
+.card:hover img{transform:scale(1.08);}
+.prod-title{font-weight:700;font-size:18px;margin-bottom:4px;}
+.prod-desc{font-size:14px;color:var(--muted);margin-bottom:10px;}
+.price-row{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #eee;padding-top:10px;margin-top:10px;}
+.price{font-weight:700;color:var(--accent);}
+.qty{display:flex;align-items:center;gap:6px;}
+.qty button{width:32px;height:32px;border:0;border-radius:8px;background:var(--accent);color:#fff;cursor:pointer;font-weight:700;transition:.3s;}
+.qty button:hover{background:var(--accent-dark);}
+.qty input{width:45px;text-align:center;border:1px solid #ddd;border-radius:8px;padding:5px;font-weight:600;}
+.cart .card{position:sticky;top:30px;}
+.cart h3{margin-top:0;font-size:22px;font-weight:700;color:var(--brown);}
+.cart-list{max-height:300px;overflow:auto;margin-bottom:16px;}
+.cart-item{display:flex;gap:10px;padding:10px;border:1px solid #eee;border-radius:12px;background:#fff;margin-bottom:10px;align-items:center;}
+.cart-item img{width:60px;height:60px;object-fit:cover;border-radius:10px;}
+.total-row{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:18px;background:#fff3e0;padding:14px;border-radius:12px;margin-top:10px;}
+.total-row #total{color:var(--accent);}
+.controls{display:flex;flex-direction:column;gap:10px;margin-top:15px;}
+.controls input,.controls textarea{padding:12px 14px;border-radius:10px;border:1px solid #ddd;font-family:inherit;}
+.controls input:focus,.controls textarea:focus{outline:none;border-color:var(--accent);}
+.controls input::placeholder,.controls textarea::placeholder{color:#bba88b;}
+.btn{padding:12px 16px;border-radius:10px;border:0;cursor:pointer;font-weight:700;font-family:inherit;transition:.3s;}
+.btn-primary{background:linear-gradient(135deg,#c47f2e,#ffb84d);color:#fff;box-shadow:0 4px 12px rgba(196,127,46,0.3);}
+.btn-primary:hover{transform:translateY(-2px);}
+.btn-ghost{background:#fff;border:1px solid #ddd;color:#4b2e05;}
+footer{margin-top:20px;font-size:13px;color:#7a6a5a;text-align:center;}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="logo"><span>CC</span></div>
-      <div>
-        <h1>Coffee Corner</h1>
-        <p class="lead">Pilih kopi favoritmu, atur jumlah, lalu pesan langsung melalui WhatsApp</p>
-      </div>
-    </header>
-
-    <div class="grid">
-      <section>
-        <div class="info-card">
-          <strong>✨ Petunjuk singkat:</strong>
-          <p>Isi <strong>Nomor WhatsApp</strong> (format: country code + nomor, contoh: 62*******), lengkapi nama/alamat bila perlu, lalu klik "Order via WhatsApp".</p>
-        </div>
-
-        <div class="products" id="products"></div>
-      </section>
-
-      <aside class="cart">
-        <div class="card">
-          <h3>Keranjang</h3>
-          <div class="cart-list" id="cart-list">
-            <p style="color:var(--muted);text-align:center;padding:20px 0;">Belum ada item. Tambah dari daftar produk.</p>
-          </div>
-
-          <div class="total-row">
-            <div>Total</div>
-            <div id="total">Rp 0</div>
-          </div>
-
-          <div class="controls">
-            <!-- Nomor WA default sudah diperbarui ke format internasional -->
-            <input id="waNumber" value="6288210490702" placeholder="Nomor WA tujuan (contoh: 62812...)" />
-            <input id="custName" placeholder="Nama (opsional)" />
-            <textarea id="custNotes" rows="2" placeholder="Catatan / alamat (opsional)"></textarea>
-            <div style="display:flex;gap:10px">
-              <button class="btn btn-primary" id="orderBtn" style="flex:1">Order via WhatsApp</button>
-              <button class="btn btn-ghost" id="clearBtn">Bersihkan</button>
-            </div>
-          </div>
-        </div>
-
-        <footer>
-          Tidak perlu backend — semua data dikomposisi di browser dan dikirim ke WhatsApp.
-        </footer>
-      </aside>
+<div class="wrap">
+  <header>
+    <div class="logo">☕</div>
+    <div>
+      <h1>Coffee Corner</h1>
+      <p class="lead">Nikmati aroma kopi terbaik, pesan langsung via WhatsApp!</p>
     </div>
-  </div>
+  </header>
 
-  <script>
-    // Produk contoh (sama seperti versi Anda)
-    const PRODUCTS = [
-      { id: 'p1', name: 'Americano', price: 10000, desc: 'Espresso + air panas', img: 'caffucino.png' },
-      { id: 'p2', name: 'Cappuccino', price: 20000, desc: 'Espresso, susu & busa', img: 'caffucino.png' },
-      { id: 'p3', name: 'Latte', price: 22000, desc: 'Lembut & creamy', img: 'caffucino.png' },
-      { id: 'p4', name: 'Espresso', price: 9000, desc: 'Kopi pekat klasik', img: 'caffucino.png' },
-      { id: 'p5', name: 'Mocha', price: 25000, desc: 'Cokelat + kopi', img: 'caffucino.png' },
-      { id: 'p6', name: 'Kopi Bubuk (500gr)', price: 120000, desc: 'Bijian pilihan', img: 'caffucino.png' }
-    ];
+  <div class="grid">
+    <section>
+      <div class="products" id="products"></div>
+    </section>
 
-    // State
-    const cart = {} // id -> qty
-
-    // Utilities
-    function formatIDR(n){
-      const s = Number(n).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-      return 'Rp ' + s;
-    }
-
-    // Render products
-    const productsEl = document.getElementById('products');
-    PRODUCTS.forEach(prod=>{
-      const el = document.createElement('div'); el.className='card';
-      el.innerHTML = `
-        <div class="prod-img"><img src="${prod.img}" alt="${prod.name}"></div>
-        <div class="prod-title">${prod.name}</div>
-        <div class="prod-desc">${prod.desc}</div>
-        <div class="price-row">
-          <div class="price">${formatIDR(prod.price)}</div>
-          <div class="qty">
-            <button data-action="dec" data-id="${prod.id}">-</button>
-            <input type="number" min="0" value="0" data-id="${prod.id}" />
-            <button data-action="inc" data-id="${prod.id}">+</button>
+    <aside class="cart">
+      <div class="card">
+        <h3>Keranjang</h3>
+        <div id="cart-list" class="cart-list"><p style="text-align:center;color:var(--muted)">Belum ada item</p></div>
+        <div class="total-row"><div>Total</div><div id="total">Rp 0</div></div>
+        <div class="controls">
+          <!-- hanya 1 nomor WA -->
+          <input id="waNumber" value="6288210490702" placeholder="Nomor WhatsApp tujuan (contoh: 62812...)">
+          <input id="custName" placeholder="Nama (opsional)">
+          <textarea id="custNotes" rows="2" placeholder="Catatan / alamat (opsional)"></textarea>
+          <div style="display:flex;gap:10px">
+            <button class="btn btn-primary" id="orderBtn" style="flex:1">Order via WhatsApp</button>
+            <button class="btn btn-ghost" id="clearBtn">Bersihkan</button>
           </div>
         </div>
-      `;
-      productsEl.appendChild(el);
-    });
+      </div>
+      <footer>Semua data langsung dikirim ke WhatsApp tanpa backend.</footer>
+    </aside>
+  </div>
+</div>
 
-    // Wire controls (sama)
-    productsEl.addEventListener('click', function(e){
-      const btn = e.target.closest('button');
-      if(!btn) return;
-      const action = btn.dataset.action;
-      const id = btn.dataset.id;
-      if(action && id){
-        const input = productsEl.querySelector(`input[data-id="${id}"]`);
-        let val = parseInt(input.value||0,10);
-        if(action==='inc') val = val + 1;
-        if(action==='dec') val = Math.max(0, val - 1);
-        input.value = val;
-        updateCartItem(id, val);
-      }
-    });
+<script>
+const PRODUCTS=[
+  {id:'p1',name:'Americano',price:10000,desc:'Espresso + air panas',img:'caffucino.png'},
+  {id:'p2',name:'Cappuccino',price:20000,desc:'Espresso, susu & busa lembut',img:'caffucino.png'},
+  {id:'p3',name:'Latte',price:22000,desc:'Kopi susu lembut',img:'caffucino.png'},
+  {id:'p4',name:'Espresso',price:9000,desc:'Pekat dan klasik',img:'caffucino.png'},
+  {id:'p5',name:'Mocha',price:25000,desc:'Cokelat dan kopi berpadu',img:'caffucino.png'},
+  {id:'p6',name:'Kopi Bubuk 500gr',price:120000,desc:'Biji pilihan, siap seduh',img:'caffucino.png'}
+];
+const cart={};
+function formatIDR(n){ return 'Rp '+Number(n).toLocaleString('id-ID'); }
+const productsEl=document.getElementById('products');
+PRODUCTS.forEach(p=>{
+  const el=document.createElement('div');
+  el.className='card';
+  el.innerHTML=`
+    <div class="prod-img"><img src="${p.img}" alt="${p.name}"></div>
+    <div class="prod-title">${p.name}</div>
+    <div class="prod-desc">${p.desc}</div>
+    <div class="price-row">
+      <div class="price">${formatIDR(p.price)}</div>
+      <div class="qty">
+        <button data-action="dec" data-id="${p.id}">-</button>
+        <input type="number" min="0" value="0" data-id="${p.id}">
+        <button data-action="inc" data-id="${p.id}">+</button>
+      </div>
+    </div>`;
+  productsEl.appendChild(el);
+});
+productsEl.addEventListener('click',e=>{
+  const btn=e.target.closest('button'); if(!btn) return;
+  const action=btn.dataset.action,id=btn.dataset.id;
+  const inp=productsEl.querySelector(`input[data-id="${id}"]`);
+  let v=parseInt(inp.value||0);
+  if(action==='inc') v++; else if(action==='dec') v=Math.max(0,v-1);
+  inp.value=v; updateCartItem(id,v);
+});
+productsEl.addEventListener('change',e=>{
+  const inp=e.target.closest('input'); if(!inp) return;
+  const id=inp.dataset.id; let v=parseInt(inp.value||0);
+  if(isNaN(v)||v<0) v=0; inp.value=v; updateCartItem(id,v);
+});
+const cartList=document.getElementById('cart-list'), totalEl=document.getElementById('total');
+function updateCartItem(id,qty){ if(qty<=0) delete cart[id]; else cart[id]=qty; renderCart(); }
+function renderCart(){
+  cartList.innerHTML=''; let total=0;
+  const items=Object.keys(cart).map(id=>{ const p=PRODUCTS.find(x=>x.id===id); return {p,qty:cart[id]}; });
+  if(items.length===0){ cartList.innerHTML='<p style="text-align:center;color:var(--muted)">Belum ada item</p>'; totalEl.textContent='Rp 0'; return; }
+  items.forEach(({p,qty})=>{
+    const sub=p.price*qty; total+=sub;
+    const div=document.createElement('div'); div.className='cart-item';
+    div.innerHTML=`
+      <img src="${p.img}" alt="${p.name}">
+      <div style="flex:1"><b>${p.name}</b><br><small style="color:var(--muted)">${p.desc}</small><br><span style="color:var(--accent)">${formatIDR(sub)}</span></div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:center">
+        <button data-action="inc" data-id="${p.id}">+</button>
+        <div style="min-width:32px;text-align:center;font-weight:700">${qty}</div>
+        <button data-action="dec" data-id="${p.id}">-</button>
+      </div>`;
+    cartList.appendChild(div);
+  });
+  totalEl.textContent=formatIDR(total);
+  cartList.querySelectorAll('button').forEach(b=>{
+    b.addEventListener('click',()=>{ const a=b.dataset.action,id=b.dataset.id; const v=cart[id]||0; if(a==='inc') updateCartItem(id,v+1); else updateCartItem(id,Math.max(0,v-1)); });
+  });
+}
+document.getElementById('clearBtn').addEventListener('click',()=>{
+  Object.keys(cart).forEach(k=>delete cart[k]);
+  productsEl.querySelectorAll('input[type=number]').forEach(i=>i.value=0);
+  renderCart();
+});
 
-    productsEl.addEventListener('change', function(e){
-      const input = e.target.closest('input');
-      if(!input) return;
-      const id = input.dataset.id; if(!id) return;
-      let val = parseInt(input.value||0,10);
-      if(isNaN(val) || val < 0) val = 0;
-      input.value = val;
-      updateCartItem(id, val);
-    });
+// Order handler — only one WA number (6288210490702)
+document.getElementById('orderBtn').addEventListener('click',()=>{
+  const waInput=document.getElementById('waNumber').value.trim();
+  if(!waInput){ alert('Silakan isi Nomor WhatsApp tujuan (contoh: 62812...)'); return; }
 
-    const cartList = document.getElementById('cart-list');
-    const totalEl = document.getElementById('total');
+  const items=Object.keys(cart).map(id=>{
+    const p=PRODUCTS.find(x=>x.id===id);
+    return {name:p.name,qty:cart[id],subtotal:p.price*cart[id]};
+  });
+  if(items.length===0){ alert('Keranjang kosong — tambahkan item.'); return; }
 
-    function updateCartItem(id, qty){
-      if(qty <= 0){
-        delete cart[id];
-      } else {
-        cart[id] = qty;
-      }
-      renderCart();
-    }
+  // build message
+  const lines=[];
+  lines.push('Halo! Saya ingin memesan dari Coffee Corner:');
+  lines.push('');
+  let total=0;
+  items.forEach(it=>{
+    lines.push(`- ${it.name} x${it.qty} = ${formatIDR(it.subtotal)}`);
+    total += it.subtotal;
+  });
+  lines.push('');
+  lines.push(`Total: ${formatIDR(total)}`);
+  const name=document.getElementById('custName').value.trim();
+  const notes=document.getElementById('custNotes').value.trim();
+  if(name) lines.push('', 'Nama: ' + name);
+  if(notes) lines.push('Catatan/Alamat: ' + notes);
+  lines.push('', 'Terima kasih!');
 
-    function renderCart(){
-      cartList.innerHTML = '';
-      const items = Object.keys(cart).map(id=>{
-        const prod = PRODUCTS.find(p=>p.id===id);
-        return { prod, qty: cart[id] };
-      });
-      if(items.length===0){
-        cartList.innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px 0;">Belum ada item. Tambah dari daftar produk.</p>';
-        totalEl.textContent = formatIDR(0);
-        return;
-      }
+  const encoded = encodeURIComponent(lines.join('\n'));
 
-      let total = 0;
-      items.forEach(({prod, qty})=>{
-        const line = document.createElement('div'); line.className='cart-item';
-        const subtotal = prod.price * qty;
-        total += subtotal;
-        line.innerHTML = `
-          <img src="${prod.img}" alt="${prod.name}">
-          <div class="meta">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="font-weight:700;font-size:15px">${prod.name}</div><div style="font-weight:800;color:#ff8c42">${formatIDR(subtotal)}</div></div>
-            <div style="display:flex;gap:8px;align-items:center">
-              <div style="color:var(--muted);font-size:13px;flex:1">${prod.desc}</div>
-              <div style="display:flex;gap:6px;align-items:center">
-                <button data-action="dec" data-id="${prod.id}">-</button>
-                <div style="min-width:32px;text-align:center;font-weight:700">${qty}</div>
-                <button data-action="inc" data-id="${prod.id}">+</button>
-              </div>
-            </div>
-          </div>
-        `;
-        cartList.appendChild(line);
-      });
+  // normalize number: allow formats like 0858..., +628..., or 628...
+  let cleaned = waInput.replace(/[^\d\+]/g, '');
+  if(cleaned.startsWith('+')) cleaned = cleaned.slice(1);
+  if(cleaned.startsWith('0')) cleaned = '62' + cleaned.slice(1);
+  cleaned = cleaned.replace(/[^\d]/g, '');
+  if(!/^\d+$/.test(cleaned)){ alert('Nomor WhatsApp tidak valid. Pastikan berisi angka (contoh: 62812...)'); return; }
 
-      totalEl.textContent = formatIDR(total);
+  const url = 'https://wa.me/' + cleaned + '?text=' + encoded;
+  window.open(url, '_blank');
+});
 
-      // Wire inc/dec inside cart (delegate)
-      cartList.querySelectorAll('button').forEach(b=>{
-        b.addEventListener('click', function(ev){
-          const action = this.dataset.action; const id = this.dataset.id;
-          const curr = cart[id] || 0;
-          if(action==='inc') updateCartItem(id, curr + 1);
-          if(action==='dec') updateCartItem(id, Math.max(0, curr - 1));
-        });
-      });
-    }
-
-    document.getElementById('clearBtn').addEventListener('click', ()=>{
-      // reset inputs
-      PRODUCTS.forEach(p=>{
-        const inp = productsEl.querySelector(`input[data-id="${p.id}"]`);
-        if(inp) inp.value = 0;
-      });
-      for(const k in cart) delete cart[k];
-      renderCart();
-    });
-
-    // IMPORTANT: use international format — convert leading 0 -> 62 if user types local number
-    document.getElementById('orderBtn').addEventListener('click', ()=>{
-      const wa = document.getElementById('waNumber').value.trim();
-      if(!wa){
-        alert('Silakan isi Nomor WhatsApp tujuan (contoh: 62812...)');
-        return;
-      }
-
-      const items = Object.keys(cart).map(id=>{
-        const p = PRODUCTS.find(x=>x.id===id);
-        return { name: p.name, price: p.price, qty: cart[id], subtotal: p.price * cart[id] };
-      });
-      if(items.length===0){
-        alert('Keranjang kosong — tambahkan setidaknya 1 item.');
-        return;
-      }
-
-      // Compose message
-      const lines = [];
-      let total = 0;
-      items.forEach(it=>{
-        lines.push(`${it.name} x${it.qty} = ${formatIDR(it.subtotal)}`);
-        total += it.subtotal;
-      });
-      lines.push('');
-      lines.push(`Total: ${formatIDR(total)}`);
-
-      const name = document.getElementById('custName').value.trim();
-      const notes = document.getElementById('custNotes').value.trim();
-      if(name) lines.push('Nama: ' + name);
-      if(notes) lines.push('Catatan/Alamat: ' + notes);
-      lines.push('Terima kasih!');
-
-      const text = encodeURIComponent(lines.join('\n'));
-
-      // clean and normalize phone number
-      let cleaned = wa.replace(/[^\d\+]/g, '');
-      if(cleaned.startsWith('+')) cleaned = cleaned.slice(1);
-      if(cleaned.startsWith('0')) cleaned = '62' + cleaned.slice(1);
-      cleaned = cleaned.replace(/[^\d]/g, '');
-      if(!/^\d+$/.test(cleaned)){
-        alert('Nomor WhatsApp tidak valid. Pastikan berisi angka (contoh: 62812...)');
-        return;
-      }
-
-      const url = 'https://wa.me/' + cleaned + '?text=' + text;
-      window.open(url, '_blank');
-    });
-
-    // Initial render
-    renderCart();
-  </script>
+renderCart();
+</script>
 </body>
 </html>
