@@ -585,7 +585,8 @@
           </div>
 
           <div class="controls">
-            <input id="waNumber" value="085817270872" placeholder="Nomor WA tujuan (contoh: 62812...)" />
+            <!-- Nomor WA default sudah diperbarui ke format internasional -->
+            <input id="waNumber" value="6288210490702" placeholder="Nomor WA tujuan (contoh: 62812...)" />
             <input id="custName" placeholder="Nama (opsional)" />
             <textarea id="custNotes" rows="2" placeholder="Catatan / alamat (opsional)"></textarea>
             <div style="display:flex;gap:10px">
@@ -603,7 +604,7 @@
   </div>
 
   <script>
-    // Produk contoh (ubah sesuka hati)
+    // Produk contoh (sama seperti versi Anda)
     const PRODUCTS = [
       { id: 'p1', name: 'Americano', price: 10000, desc: 'Espresso + air panas', img: 'caffucino.png' },
       { id: 'p2', name: 'Cappuccino', price: 20000, desc: 'Espresso, susu & busa', img: 'caffucino.png' },
@@ -642,7 +643,7 @@
       productsEl.appendChild(el);
     });
 
-    // Wire controls
+    // Wire controls (sama)
     productsEl.addEventListener('click', function(e){
       const btn = e.target.closest('button');
       if(!btn) return;
@@ -737,6 +738,7 @@
       renderCart();
     });
 
+    // IMPORTANT: use international format — convert leading 0 -> 62 if user types local number
     document.getElementById('orderBtn').addEventListener('click', ()=>{
       const wa = document.getElementById('waNumber').value.trim();
       if(!wa){
@@ -754,23 +756,34 @@
       }
 
       // Compose message
-      let msg = 'Halo! Saya ingin memesan dari *Coffee Corner*:%0A%0A';
+      const lines = [];
       let total = 0;
       items.forEach(it=>{
-        msg += `- ${it.name} x${it.qty} = ${formatIDR(it.subtotal).replace(/ /g,'%20')}%0A`;
+        lines.push(`${it.name} x${it.qty} = ${formatIDR(it.subtotal)}`);
         total += it.subtotal;
       });
-      msg += `%0A*Total*: ${formatIDR(total).replace(/ /g,'%20')}%0A%0A`;
+      lines.push('');
+      lines.push(`Total: ${formatIDR(total)}`);
 
       const name = document.getElementById('custName').value.trim();
       const notes = document.getElementById('custNotes').value.trim();
-      if(name) msg += `Nama: ${encodeURIComponent(name)}%0A`;
-      if(notes) msg += `Catatan/Alamat: ${encodeURIComponent(notes)}%0A`;
+      if(name) lines.push('Nama: ' + name);
+      if(notes) lines.push('Catatan/Alamat: ' + notes);
+      lines.push('Terima kasih!');
 
-      msg += '%0ATerima%20kasih!';
+      const text = encodeURIComponent(lines.join('\n'));
 
-      const cleaned = wa.replace(/[^\d]/g, '');
-      const url = 'https://wa.me/' + cleaned + '?text=' + msg;
+      // clean and normalize phone number
+      let cleaned = wa.replace(/[^\d\+]/g, '');
+      if(cleaned.startsWith('+')) cleaned = cleaned.slice(1);
+      if(cleaned.startsWith('0')) cleaned = '62' + cleaned.slice(1);
+      cleaned = cleaned.replace(/[^\d]/g, '');
+      if(!/^\d+$/.test(cleaned)){
+        alert('Nomor WhatsApp tidak valid. Pastikan berisi angka (contoh: 62812...)');
+        return;
+      }
+
+      const url = 'https://wa.me/' + cleaned + '?text=' + text;
       window.open(url, '_blank');
     });
 
